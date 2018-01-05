@@ -1,0 +1,51 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  background-color: rgb(234, 255, 234);
+  color: #074201;
+  line-height: 1.6;
+  padding: 1em;
+  max-width: 245px;
+  overflow-x: hidden;
+}
+
+.chat-text {
+  font-size: 14px;
+  border-radius: 20px;
+  padding: 5px 10px;
+  background: #55c50b;
+  color: #fff;
+  min-width: 51%;
+  max-width: 80%;
+  margin: 5px 0;
+  overflow-wrap: break-word;
+}
+
+#sender-text {
+  float: right;
+}
+
+#receiver-text {
+  float: left;
+}
+
+/* Custom scrollbar */
+
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #787878;
+}

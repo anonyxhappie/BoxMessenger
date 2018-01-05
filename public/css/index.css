@@ -1,0 +1,196 @@
+ * {
+   box-sizing: border-box;
+   font-family: 'Roboto', sans-serif;
+   outline: none;
+ }
+
+ /* LOGIN DIALOG */
+
+ .app-icon{
+   font-size: 120%;
+ }
+
+ #login-error {
+   display: none;
+ }
+
+ .mdl-dialog__actions {
+   width: 120px;
+ }
+
+ #login-btn-one {
+   float: left;
+   margin-left: -10px;
+  }
+
+  #btn-login-one, #btn-signup-two{
+    background: #47a509;
+  }
+
+  #signup-btn-one {
+    padding-left: 8px !important;
+  }
+
+  #signup-btn-two {
+    margin-right: 30px;
+  }
+  
+ #btn-signup-one, #btn-login-two {
+   border: none;
+   background-color: transparent;
+ }
+
+ /*LOGIN COVER */
+
+ .login-cover {
+   background: #fff;
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100vh;
+   z-index: 800;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+ }
+
+ /* MAIN PAGE */
+
+ /* HEADER */
+
+ .mdl-layout__header, #btn-logout{
+  background: #7ed112; 
+}
+
+ .mdl-layout__title {
+   margin-left: -40px;
+ }
+
+ #icon-logout {
+   margin-left: 10px;
+ }
+
+ /* NAVEBAR */
+.mdl-layout__drawer{
+  background: #aef552;
+}
+
+ .mdl-navigation {
+   padding-top: 0 !important;
+ }
+
+ .mdl-layout-title {
+   margin-top: 10px;
+ }
+
+ .mdl-navigation__link {
+   border: none;
+   background: #7ed11275;
+   text-align: inherit;
+   color: #000 !important;
+ }
+
+ .mdl-navigation__link:hover{
+  background-color: #222;
+ }
+
+ /* MAIN CONTENT */
+
+ .mdl-layout__content {
+   background-color: #7ed1122d;
+ }
+
+ #user-info-wrapper {
+   margin: 90px;
+   width: 20%;
+ }
+
+ #page-content {
+   width: 100%;
+   height: 100vh;
+   padding-top: 5px;
+   padding-left: 50px;
+ }
+
+ /* CHAT WINDOW */
+
+ #chat-window {
+   display: none;
+   width: 280px;
+   height: inherit;
+   float: right;
+   margin-right: 50px;
+   position: absolute;
+   bottom: 0;
+   right: 0;
+ }
+
+ #chat-header {
+   width: 100%;
+   height: 30px;
+   background-color: #55c50b;
+ }
+
+ #chat-uname {
+   color: #fff;
+   padding: 3px 0 0 10px;
+ }
+
+ #btn-close {
+   position: absolute;
+   top: 0;
+   right: 0;
+   float: right;
+   height: inherit;
+   border: none;
+   background-color: transparent;
+   color: #fff;
+ }
+
+ #chat-input {
+   width: 85%;
+   height: 30px;
+   border-color: #F5F5F5;
+   border-left: transparent;
+ }
+
+ #btn-send {
+   float: right;
+   right: 0;
+   height: 30px;
+   border: none;
+   background-color: #55c50b;
+   color: #fff;
+ }
+
+ button {
+   cursor: pointer;
+ }
+
+ iframe {
+   width: 278px;
+   height: 225px;
+ }
+
+ /* CUSTOM SCROLLBAR */
+
+ ::-webkit-scrollbar {
+   width: 2px;
+ }
+
+ ::-webkit-scrollbar-track {
+   background: #f1f1f1;
+ }
+
+ ::-webkit-scrollbar-thumb {
+   background: #E0E0E0;
+ }
+
+ ::-webkit-scrollbar-thumb:hover {
+   background: #888;
+ }
+
+ #name-space, #signup-btn-two, #login-btn-two {
+   display: none;
+ }
