@@ -1,3 +1,5 @@
+let chatTableArray = [];
+
 // RETURN REFERENCE TO 'users' COLLECTION
 function usersRef(){
   return firebase.database().ref('users');
@@ -28,11 +30,11 @@ $("#btn-signup-two").click(
 
 // UPDATE NEW USERS IN 'users' COLLECTION
 function updateNewUserInFirebaseDB(username, email) {
-  let newUser = {
+  usersRef().push().set({
     username: username,
     email: email
-  };
-  usersRef().push().set(newUser);
+  });
+  console.log('done');
   sessionStorage.setItem('USERNAME', username);
   sessionStorage.setItem('USEREMAIL', email);
 }
@@ -79,6 +81,7 @@ function updateUIAfterLogin(email) {
   getAndUpdateUsernameFromFirebaseDB(email);
   $("#email-area").text(sessionStorage.getItem('USEREMAIL'));
   getAndUpdateUsersFromFirebaseDB(email);
+  //getChatTableArray();
 }
 
 // GET AND UPDATE USERLIST FROM FIREBASE DB 'users'
@@ -87,7 +90,7 @@ function getAndUpdateUsersFromFirebaseDB(email) {
   usersRef().on('child_added', function(snapshot) {
     user = snapshot.val();
     if (user.email != email)
-      output += '<button onclick="chatWindow(this)" id="' + user.username + '" class="mdl-navigation__link"><i class="material-icons">account_circle</i> &nbsp;' + user.username + '</button>';
+      output += '<button onclick="chatWindow(this.id)" id="' + user.username + '" class="mdl-navigation__link"><i class="material-icons">account_circle</i> &nbsp;' + user.username + '</button>';
     $('#active-users').html(output);
   });
 }
@@ -120,14 +123,38 @@ $("#btn-logout").click(
 // POPULATE CHAT WINDOW
 function chatWindow(username) {
   $("#chat-window").show();
-  $("#chat-uname").text(username.id);
+  $("#chat-uname").text(username);
 
   sessionStorage.removeItem('USER2');
   sessionStorage.removeItem('TABLENAME');
-  sessionStorage.setItem('USER2', username.id);
-  updateTableName(username.id);
+  sessionStorage.setItem('USER2', username);
+  updateTableName(username);
   document.getElementById('chat-frame').contentWindow.location.reload();
 }
+
+firebase.database().ref('chat').on('value', function(snapshot) {
+  let username = sessionStorage.getItem('USERNAME');
+  let tn = snapshot.val();
+  for(let key in tn) {
+    let count = 0;
+    firebase.database().ref('chat/' + key).on('child_added', function(snapshot) {
+      let msgR = snapshot.val(); count++;
+      if(msgR.username != username 
+        && key.indexOf(username.toUpperCase()) != -1 
+        && chatTableArray[key]
+        && count > chatTableArray[key]){
+        chatWindow(msgR.username);
+        //console.log(key, msgR.username, count);
+      }
+    });
+    chatTableArray[key] = count;
+  }
+});  
+
+
+
+
+
 
 // HELPER FUNCTION TO UPDATE TABLE NAME FOR CHAT
 let gChatRef;
