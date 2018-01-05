@@ -1,4 +1,4 @@
-let chatTableArray = [];
+let chatTableArray = [], windowStatus = false;
 
 // RETURN REFERENCE TO 'users' COLLECTION
 function usersRef(){
@@ -121,17 +121,23 @@ $("#btn-logout").click(
 );
 
 // POPULATE CHAT WINDOW
-function chatWindow(username) {
-  $("#chat-window").show();
-  $("#chat-uname").text(username);
-
-  sessionStorage.removeItem('USER2');
-  sessionStorage.removeItem('TABLENAME');
-  sessionStorage.setItem('USER2', username);
-  updateTableName(username);
-  document.getElementById('chat-frame').contentWindow.location.reload();
+function chatWindow(receiver) {
+    $("#chat-window").show();
+    $("#chat-uname").text(receiver);
+  
+    // sessionStorage.removeItem('USER2');
+    // sessionStorage.removeItem('TABLENAME');
+    let lastReciever = sessionStorage.getItem('USER2');
+    sessionStorage.setItem('USER2', receiver);
+    updateTableName(receiver);
+    if(!windowStatus || (receiver != lastReciever && windowStatus)){
+      windowStatus = true;
+      document.getElementById('chat-frame').contentWindow.location.reload();
+    }
+        
 }
 
+// NOTIFY ON MESSAGE RECIEVE
 firebase.database().ref('chat').on('value', function(snapshot) {
   let username = sessionStorage.getItem('USERNAME');
   let tn = snapshot.val();
@@ -139,22 +145,18 @@ firebase.database().ref('chat').on('value', function(snapshot) {
     let count = 0;
     firebase.database().ref('chat/' + key).on('child_added', function(snapshot) {
       let msgR = snapshot.val(); count++;
+      let receiver = sessionStorage.getItem('USER2');
       if(msgR.username != username 
         && key.indexOf(username.toUpperCase()) != -1 
         && chatTableArray[key]
         && count > chatTableArray[key]){
+        console.log(receiver, msgR.username);
         chatWindow(msgR.username);
-        //console.log(key, msgR.username, count);
       }
     });
     chatTableArray[key] = count;
   }
 });  
-
-
-
-
-
 
 // HELPER FUNCTION TO UPDATE TABLE NAME FOR CHAT
 let gChatRef;
@@ -187,6 +189,7 @@ $('#msg-form').submit(function(e) {
 $("#btn-close").click(
   function() {
     $("#chat-window").hide();
+    windowStatus = false;
   }
 );
 
