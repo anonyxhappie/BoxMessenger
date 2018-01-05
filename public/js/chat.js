@@ -9,15 +9,16 @@ if (sender < receiver) {
 
 function getMessagsFromFirebase() {
   let firebaseDatabaseReference = firebase.database().ref('chat/' + tableName);
-  let output = '',
-  msgs = '';
+  let output = msgs = divID = '';
   firebaseDatabaseReference.on('child_added', function(snapshot) {
     msgs = snapshot.val();
     if (msgs.username == sender) {
-      output += '<div id="sender-text" class="chat-text ' + msgs.username + '">' + msgs.msg + '</div>';
+      divID = "sender-text";
     } else {
-      output += '<div id="receiver-text" class="chat-text ' + msgs.username + '">' + msgs.msg + '</div>';
+      divID = "receiver-text";
     }
-    document.getElementById("chatbox").innerHTML = output;
+    output += '<div id='+ divID +' class="chat-text ' + msgs.username + '">' + msgs.msg + '</div>';
+    $('#chatbox').html(output);
+    $("html, body").scrollTop($(document).height() - $(window).height());
   });
 }

@@ -1,4 +1,7 @@
-let usersRef = firebase.database().ref('users');
+// RETURN REFERENCE TO 'users' COLLECTION
+function usersRef(){
+  return firebase.database().ref('users');
+}
 
 // ON SIGNUP BUTTON CLICK
 $("#btn-signup-two").click(
@@ -29,7 +32,7 @@ function updateNewUserInFirebaseDB(username, email) {
     username: username,
     email: email
   };
-  usersRef.push().set(newUser);
+  usersRef().push().set(newUser);
   sessionStorage.setItem('USERNAME', username);
   sessionStorage.setItem('USEREMAIL', email);
 }
@@ -80,9 +83,8 @@ function updateUIAfterLogin(email) {
 
 // GET AND UPDATE USERLIST FROM FIREBASE DB 'users'
 function getAndUpdateUsersFromFirebaseDB(email) {
-  let output = '',
-    user = '';
-  usersRef.on('child_added', function(snapshot) {
+  let output = user = '';
+  usersRef().on('child_added', function(snapshot) {
     user = snapshot.val();
     if (user.email != email)
       output += '<button onclick="chatWindow(this)" id="' + user.username + '" class="mdl-navigation__link"><i class="material-icons">account_circle</i> &nbsp;' + user.username + '</button>';
@@ -92,7 +94,7 @@ function getAndUpdateUsersFromFirebaseDB(email) {
 
 // GET AND UPDATE USERNAME FROM FIREBASE DB 'users'
 function getAndUpdateUsernameFromFirebaseDB(pEmail) {
-  usersRef.on('child_added', function(snapshot) {
+  usersRef().on('child_added', function(snapshot) {
     user = snapshot.val();
     if (user.email == pEmail) {
       sessionStorage.setItem('USERNAME', user.username);
@@ -150,8 +152,7 @@ $('#msg-form').submit(function(e) {
     username: sessionStorage.getItem('USERNAME'),
     msg: msg
   };
-  if (msg)
-    gChatRef.push().set(newMsg);
+  gChatRef.push().set(newMsg);
   $('#chat-input').val('');
 });
 
