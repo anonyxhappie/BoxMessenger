@@ -17,9 +17,13 @@ A simple Web Based Real-Time Chat Application
 
 ![bm_3](https://user-images.githubusercontent.com/9645332/34606040-d863d2d2-f233-11e7-8b99-ba5c6a4e56d0.png)
 
-* 3. Home
+* 3. Home - Laptop
 
 ![bm_4](https://user-images.githubusercontent.com/9645332/34606842-f3f7e274-f236-11e7-98c5-fdb8e3fe47b0.png)
+
+* 4. Home - Mobile
+
+![bm_5](https://user-images.githubusercontent.com/9645332/34606995-8da4ae2a-f237-11e7-8195-52713a66bb56.png)
 
 
 ## Authors
