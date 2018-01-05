@@ -1,6 +1,10 @@
 # BoxMessenger
 A simple Web Based Real-Time Chat Application
 
+## App Link
+
+> [Box Messenger](https://friendlychat-854d8.firebaseapp.com/) - SignUp/SignIn here to use the App
+
 ## Built With
 
 * [Firebase](https://firebase.google.com/) - A mobile and web application development platform
