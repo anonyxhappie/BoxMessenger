@@ -21,11 +21,15 @@ A simple Web Based Real-Time Chat Application
 
 ![bm_3](https://user-images.githubusercontent.com/9645332/34606040-d863d2d2-f233-11e7-8b99-ba5c6a4e56d0.png)
 
-* 3. Home - Laptop
+* 3. Home - User Online
 
-![bm_4](https://user-images.githubusercontent.com/9645332/34606842-f3f7e274-f236-11e7-98c5-fdb8e3fe47b0.png)
+![bm_6](https://user-images.githubusercontent.com/9645332/34635497-7ae775f4-f2b6-11e7-914e-0f0bf14a9925.png)
 
-* 4. Home - Mobile
+* 4. Home - User Offline
+
+![bm_7](https://user-images.githubusercontent.com/9645332/34635498-7b1bd696-f2b6-11e7-9df1-f9fd9e9530d1.png)
+
+* 5. Home - Mobile
 
 ![bm_5](https://user-images.githubusercontent.com/9645332/34606995-8da4ae2a-f237-11e7-8195-52713a66bb56.png)
 
