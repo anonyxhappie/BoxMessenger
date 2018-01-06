@@ -32,9 +32,9 @@ $("#btn-signup-two").click(
 function updateNewUserInFirebaseDB(username, email) {
   usersRef().push().set({
     username: username,
-    email: email
+    email: email,
+    isActive: true
   });
-  console.log('done');
   sessionStorage.setItem('USERNAME', username);
   sessionStorage.setItem('USEREMAIL', email);
 }
@@ -78,6 +78,7 @@ $("#btn-login-one").click(
 // UPDATE UI AFTER USER SIGNIN
 function updateUIAfterLogin(email) {
   sessionStorage.setItem('USEREMAIL', email);
+  setUserStatus(true);
   getAndUpdateUsernameFromFirebaseDB(email);
   $("#email-area").text(sessionStorage.getItem('USEREMAIL'));
   getAndUpdateUsersFromFirebaseDB(email);
@@ -89,8 +90,9 @@ function getAndUpdateUsersFromFirebaseDB(email) {
   let output = user = '';
   usersRef().on('child_added', function(snapshot) {
     user = snapshot.val();
-    if (user.email != email)
-      output += '<button onclick="chatWindow(this.id)" id="' + user.username + '" class="mdl-navigation__link"><i class="material-icons">account_circle</i> &nbsp;' + user.username + '</button>';
+    if (user.email != email){
+      output += '<button onclick="chatWindow(this.id, '+ user.isActive +')" id="' + user.username + '" class="mdl-navigation__link"><i id="circle-' + user.username + '" class="material-icons status-'+ user.isActive +'">account_circle</i> &nbsp;' + user.username + ' <i id="status-' + user.username + '" </button>';
+    }
     $('#active-users').html(output);
   });
 }
@@ -106,9 +108,26 @@ function getAndUpdateUsernameFromFirebaseDB(pEmail) {
   });
 }
 
+// USER ONLINE STATUS
+function setUserStatus(status){
+  let email = sessionStorage.getItem('USEREMAIL');
+  if(email){
+    usersRef().on('child_added', function(snapshot) {
+      let parentKey = snapshot.key;
+      let user = snapshot.val();
+      //console.log(parentKey);
+      if (user.email == email) {
+        firebase.database().ref("/users/" + parentKey).update({ isActive: status });
+        console.log(user.email + ' isActive set to ' + user.isActive);
+      }
+    });
+  }
+}
+
 // ON LOGOUT BUTTON CLICK
 $("#btn-logout").click(
   function() {
+    setUserStatus(false);
     firebase.auth().signOut().catch(function(error) {
       alert(error.message);
     });
@@ -121,15 +140,20 @@ $("#btn-logout").click(
 );
 
 // POPULATE CHAT WINDOW
-function chatWindow(receiver) {
+function chatWindow(receiver, status) {
     $("#chat-window").show();
     $("#chat-uname").text(receiver);
+    if(status){
+      $("#chat-header").css({"background-color": "#55c50b"});
+    }else{
+      $("#chat-header").css({"background-color": "#000"});
+    }
   
-    // sessionStorage.removeItem('USER2');
-    // sessionStorage.removeItem('TABLENAME');
     let lastReciever = sessionStorage.getItem('USER2');
-    sessionStorage.setItem('USER2', receiver);
-    updateTableName(receiver);
+    if(receiver != lastReciever){
+      sessionStorage.setItem('USER2', receiver);
+      updateTableName(receiver);  
+    }
     if(!windowStatus || (receiver != lastReciever && windowStatus)){
       windowStatus = true;
       document.getElementById('chat-frame').contentWindow.location.reload();
@@ -150,8 +174,7 @@ firebase.database().ref('chat').on('value', function(snapshot) {
         && key.indexOf(username.toUpperCase()) != -1 
         && chatTableArray[key]
         && count > chatTableArray[key]){
-        console.log(receiver, msgR.username);
-        chatWindow(msgR.username);
+        chatWindow(msgR.username, true);
       }
     });
     chatTableArray[key] = count;
@@ -170,7 +193,6 @@ function updateTableName(receiver) {
   }
   let chatRef = firebase.database().ref('chat/' + tableName);
   gChatRef = chatRef;
-  //sessionStorage.setItem('TABLENAME', tableName);
 }
 
 // SEND NEW MESSAGE
