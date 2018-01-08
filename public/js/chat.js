@@ -1,6 +1,6 @@
 let sender = sessionStorage.getItem('USERNAME');
 let receiver = sessionStorage.getItem('USER2');
-let tableName = 'CHAT_', temp = '';
+let tableName = 'CHAT_';
 if (sender < receiver) {
   tableName += (sender + receiver).toUpperCase();
 } else {

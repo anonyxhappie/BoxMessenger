@@ -41,22 +41,18 @@ function updateNewUserInFirebaseDB(username, email) {
 
 // UPDATE UI(DIALOG) AFTER USER LOGIN/SIGNUP
 firebase.auth().onAuthStateChanged(function(user) {
+  let loginDialog = document.querySelector('#login-dialog');
+  if (!loginDialog.showModal) {
+    dialogPolyfill.registerDialog(loginDialog);
+  }
   if (user) {
     // USER IS SIGNED IN
     $(".login-cover").hide();
-    let loginDialog = document.querySelector('#login-dialog');
-    if (!loginDialog.showModal) {
-      dialogPolyfill.registerDialog(loginDialog);
-    }
     loginDialog.close();
     updateUIAfterLogin(user.email);
   } else {
     // NO USER IS SIGNED IN
     $(".login-cover").show();
-    let loginDialog = document.querySelector('#login-dialog');
-    if (!loginDialog.showModal) {
-      dialogPolyfill.registerDialog(loginDialog);
-    }
     loginDialog.showModal();
   }
 });
@@ -80,9 +76,8 @@ function updateUIAfterLogin(email) {
   sessionStorage.setItem('USEREMAIL', email);
   setUserStatus(true);
   getAndUpdateUsernameFromFirebaseDB(email);
-  $("#email-area").text(sessionStorage.getItem('USEREMAIL'));
+  $("#email-area").text(email);
   getAndUpdateUsersFromFirebaseDB(email);
-  //getChatTableArray();
 }
 
 // GET AND UPDATE USERLIST FROM FIREBASE DB 'users'
@@ -115,7 +110,6 @@ function setUserStatus(status){
     usersRef().on('child_added', function(snapshot) {
       let parentKey = snapshot.key;
       let user = snapshot.val();
-      //console.log(parentKey);
       if (user.email == email) {
         firebase.database().ref("/users/" + parentKey).update({ isActive: status });
         console.log(user.email + ' isActive set to ' + user.isActive);
@@ -124,20 +118,29 @@ function setUserStatus(status){
   }
 }
 
+// LOGOUT HELPER FN
+function logoutUser(){
+  setUserStatus(false);
+  firebase.auth().signOut().catch(function(error) {
+    alert(error.message);
+  });
+  clearSession();
+}
+
 // ON LOGOUT BUTTON CLICK
 $("#btn-logout").click(
   function() {
-    setUserStatus(false);
-    firebase.auth().signOut().catch(function(error) {
-      alert(error.message);
-    });
-    $("#text-name").val('');
-    $("#text-email").val('');
-    $("#text-password").val('');
-    clearSession();
+    logoutUser();
     location.reload();
   }
 );
+
+// ON WINDOW CLOSED
+$(window).on('unload', function(){
+  if(sessionStorage.getItem('USERNAME'))
+    logoutUser();
+});
+
 
 // POPULATE CHAT WINDOW
 function chatWindow(receiver, status) {
@@ -191,19 +194,16 @@ function updateTableName(receiver) {
   } else {
     tableName += (receiver + sender).toUpperCase();
   }
-  let chatRef = firebase.database().ref('chat/' + tableName);
-  gChatRef = chatRef;
+  gChatRef = firebase.database().ref('chat/' + tableName);
 }
 
 // SEND NEW MESSAGE
 $('#msg-form').submit(function(e) {
   e.preventDefault();
-  let msg = $('#chat-input').val();
-  let newMsg = {
+  gChatRef.push().set({
     username: sessionStorage.getItem('USERNAME'),
-    msg: msg
-  };
-  gChatRef.push().set(newMsg);
+    msg: $('#chat-input').val()
+  });
   $('#chat-input').val('');
 });
 
